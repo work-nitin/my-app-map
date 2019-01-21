@@ -4,11 +4,11 @@ body {
     font-family: sans-serif;
 }
 
-.search {
+.search-filter {
     z-index: 1;
     position: fixed;
     top: 5px;
-    left: 5px;
+    right: 5px;
 }
 
 .search-field {
@@ -32,7 +32,7 @@ ul {
 }
 
 .box:hover {
-    background-color: #269abc;
+    background-color: #269;
     color: white;
 }
 
@@ -42,5 +42,5 @@ ul {
     background-color: white;
     border: 1px darkgrey solid;
     cursor: pointer;
-    width: 334px;
+    width: 333px;
 }

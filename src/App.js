@@ -15,21 +15,21 @@ class App extends Component {
             'LocationData': [
                 {
                     'name': "Dinersty Restaurent",
-                    'type': "Chinese Restaurant",
+                    'type': "Chinese",
                     'latitude': 40.74983060359955,
                     'longitude': -73.99476,
                     'streetAddress': "411 8th Ave, New York"
                 },
                 {
                     'name': "Tsuru Japanese Restaurent",
-                    'type': "Japanese Restaurant ",
+                    'type': "Japanese ",
                     'latitude': 40.65470807073356,
                     'longitude': -74.5310570132645  ,
                     'streetAddress': "413 King George Rd, New York"
                 },
                 {
                     'name': "Caribean",
-                    'type': "Caribean Restaurent",
+                    'type': "Caribean",
                     'latitude': 40.6762,
                     'longitude': -73.8736,
                     'streetAddress': "405 Shoreline Village Dr, New York"
@@ -43,14 +43,14 @@ class App extends Component {
                 },
                 {
                     'name': "Caribean Fusion Restaurent",
-                    'type': "Caribean Restaurent",
+                    'type': "Caribean",
                     'latitude': 40.893086,
                     'longitude': -73.81994,
                     'streetAddress': "Pelham Manor, NY 10803"
                 },
                 {
                     'name': "Oscar's Pizza & Restaurant",
-                    'type': "3-Star Hotel",
+                    'type': "Pizza",
                     'latitude': 40.07027,
                     'longitude': -74.14999,
                     'streetAddress': "270 Chambers Bridge Rd"
@@ -65,7 +65,6 @@ class App extends Component {
         this.openInfoWindow = this.openInfoWindow.bind(this);
         this.closeInfoWindow = this.closeInfoWindow.bind(this);
     }
-
 
     componentDidMount() {
        //  load the Google Maps script.Refer https://developers.google.com/maps/documentation/javascript/tutorial
@@ -200,9 +199,8 @@ class App extends Component {
     }
 }
 
-export default App;
 
-/* Load the google maps Asynchronously */
+/* Load the google maps Asynchronously.Refer https://developers.google.com/maps/documentation/javascript/tutorial */
 function loadMapJS(src) {
     let ref = window.document.getElementsByTagName("script")[0];
     let script = window.document.createElement("script");
@@ -213,3 +211,4 @@ function loadMapJS(src) {
     };
     ref.parentNode.insertBefore(script, ref);
 }
+export default App;

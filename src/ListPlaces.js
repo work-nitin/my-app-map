@@ -39,9 +39,7 @@ class ListPlaces extends Component {
         });
     }
 
-    /**
-     * Show and hide suggestions
-     */
+    /*Show and hide suggestions*/
     toggleSuggestions() {
         this.setState({
             'suggestions': !this.state.suggestions
@@ -57,8 +55,8 @@ class ListPlaces extends Component {
         }, this);
 
         return (
-            <div className="search">
-                <input role="search" aria-labelledby="filter" id="search-field" className="search-field" type="text" placeholder="Filter"
+            <div className="search-filter">
+                <input role="search-filter" aria-labelledby="filter" id="search-field" className="search-field" type="text" placeholder="Filter"
                        value={this.state.query} onChange={this.filterLocations}/>
                 <ul>
                     {this.state.suggestions && locationlist}
