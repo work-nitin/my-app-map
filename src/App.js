@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ListPlaces from './ListPlaces';
+import ListPlaces from './Components/ListPlaces.js';
 //import locations from './data/locations.json';
 
 import axios from 'axios';
