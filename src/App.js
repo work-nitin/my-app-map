@@ -6,7 +6,7 @@ import axios from 'axios';
 
 class App extends Component {
   state = {
-    venues: []
+    LocationData: []
   }
 
     constructor(props) {
@@ -89,7 +89,8 @@ class App extends Component {
      axios.get(url + new URLSearchParams(parameters))
            .then(response => {
              this.setState({
-               venues: response.data.response.groups[0].items},this.renderMap() )
+               LocationData: response.data.response.groups[0].items
+             },this.renderMap() )
            })
 
            .catch(error => {
@@ -100,90 +101,51 @@ class App extends Component {
 
     /*Initialise the map once the google map script is loaded. Refer https://developers.google.com/maps/documentation/javascript/tutorial*/
     initMap() {
-    //   let self = this;
-    //    let mapview = document.getElementById('map');
-    //    mapview.style.height = window.innerHeight + "px";
-/*function to create a Map*/
-    //    let map = new window.google.maps.Map(mapview, {
-  //          center: {lat: 40.74983060359955, lng:-73.99476},
-  //          zoom: 7,
-  //          mapTypeControl: false
-  //      });
+      let LocationData = [];
 
-  var map = new window.google.maps.Map(document.getElementById('map'), {
-      center: {lat: 40.7498306035995, lng:  -73.99476},
-      zoom: 8
-    })
+      let self = this;
+let mapview = document.getElementById('map');
+mapview.style.height = window.innerHeight + "px";
+let map = new window.google.maps.Map(mapview, {
+    center: {lat: 40.7498306035995, lng: -73.99476},
+    zoom: 7,
+    mapTypeControl: false
+});
         // Create An InfoWindow
         let InfoWindow = new window.google.maps.InfoWindow({});
 
-        // Display Dynamic Markers
-            this.state.venues.map(myVenue => {
-              var contentString = `${myVenue.venue.name}`
-              // Create A Marker
-              var marker = new window.google.maps.Marker({
-                position: {lat: myVenue.venue.location.lat , lng: myVenue.venue.location.lng},
-                map: map,
-                title: myVenue.venue.name
-              })
-                    // Click on A Marker!
-                    marker.addListener('click', function() {
+        window.google.maps.event.addListener(InfoWindow, 'closeclick', function () {
+            self.closeInfoWindow();
+        });
 
-                      // Change the content
-                      InfoWindow.setContent(contentString)
+        this.setState({
+            'map': map,
+            'infowindow': InfoWindow
+        });
 
-                      // Open An InfoWindow
-                      InfoWindow.open(map, marker)
-                    })
+        window.google.maps.event.addDomListener(window, "resize", function () {
+            let center = map.getCenter();
+            window.google.maps.event.trigger(map, "resize");
+            self.state.map.setCenter(center);
+        });
 
-                  })
+        window.google.maps.event.addListener(map, 'click', function () {
+            self.closeInfoWindow();
+        });
 
-
-            /*  InfoWindow.setContent(contentString)
-
-            window.google.maps.event.addListener(InfoWindow, 'closeclick', function () {
-                self.closeInfoWindow();
-            });
-
-            this.setState({
-                'map': map,
-                'infowindow': InfoWindow
-            });
-
-            window.google.maps.event.addDomListener(window, "resize", function () {
-                let center = map.getCenter();
-                window.google.maps.event.trigger(map, "resize");
-                self.state.map.setCenter(center);
-            });
-
-            window.google.maps.event.addListener(map, 'click', function () {
-                self.closeInfoWindow();
-            });
-
-          }
-
-          )
-          //}//initMap ends
-
-*/
-}//initMap ends new
-
-/*
-        let LocationData = [];
         this.state.LocationData.forEach(function (location) {
-            let name = location.name + ' - ' + location.type;
+            let longname = location.name + ' - ' + location.type;
             let marker = new window.google.maps.Marker({
-                position: new window.google.maps.LatLng(location.latitude, location.longitude),
+               position: new window.google.maps.LatLng(location.lat, location.lng),
                 animation: window.google.maps.Animation.DROP,
                 map: map
             });
-
 
             marker.addListener('click', function () {
                 self.openInfoWindow(marker);
             });
 
-            location.name = name;
+            location.longname = longname;
             location.marker = marker;
             location.display = true;
             LocationData.push(location);
@@ -192,14 +154,11 @@ class App extends Component {
             'LocationData': LocationData
         });
 
-
-
-*/
+}//initMap ends new
 
 
     /* Implement infowindow for the Marker location marker- Refer https://developers.google.com/maps/documentation/javascript/infowindows*/
     openInfoWindow(marker) {
-
       this.closeInfoWindow();
       this.state.infowindow.open(this.state.map, marker);
       marker.setAnimation(window.google.maps.Animation.BOUNCE);
@@ -209,34 +168,7 @@ class App extends Component {
       this.state.infowindow.setContent('Fetching Data...');
       this.state.map.setCenter(marker.getPosition());
       this.state.map.panBy(0, -200);
-      this.getVenues();
     }
-
-        //this.getVenues();
-
-
-/*
-        fetch(url)
-            .then(
-                function (response) {
-                    if (response.status !== 200) {
-                        self.state.infowindow.setContent("Error in loading data from foursquare API ");
-                        return;
-                    }
-                    response.json().then(function (data) {
-                        let location_data = data.response.venues[0];
-                        let readMore = '<a href="https://foursquare.com/v/'+ location_data.id +'" target="_blank">Read More on Foursquare Website</a>'
-                        self.state.infowindow.setContent(readMore);
-                    });
-                }
-            )
-            .catch(function (err) {
-                self.state.infowindow.setContent("Sorry data can't be loaded");
-            });
-
-            */
-  //  } //getVenues ends
-
 
     /* By defualt infowindow remains opens. Call the below func explicitilty to close for the marker.
     Refer : https://developers.google.com/maps/documentation/javascript/infowindows*/
