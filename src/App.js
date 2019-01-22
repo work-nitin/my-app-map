@@ -12,6 +12,13 @@ class App extends Component {
 		super( props );
 		this.state = {
 			'LocationData': [
+        {
+         "name": "Dinersty Restaurent",
+         "type": "Chinese",
+          "latitude": 40.74983060359955,
+           "longitude": -73.99476,
+            "streetAddress": "411 8th Ave, New York"
+          },
 				 {
 					'name': "Tsuru Japanese Restaurent"
 					, 'type': "Japanese "
