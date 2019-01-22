@@ -2,7 +2,9 @@ import React, {
 	Component
 } from 'react';
 import ListPlaces from './Components/ListPlaces.js';
-//import locations from './data/locations.json';
+//import LocationData from './LocationData.json';
+//import LocationData from 'json!../LocationData.json';
+
 //import axios from 'axios';
 
 class App extends Component {
@@ -10,14 +12,7 @@ class App extends Component {
 		super( props );
 		this.state = {
 			'LocationData': [
-				{
-					'name': "Dinersty Restaurent"
-					, 'type': "Chinese"
-					, 'latitude': 40.74983060359955
-					, 'longitude': -73.99476
-					, 'streetAddress': "411 8th Ave, New York"
-                }
-				, {
+				 {
 					'name': "Tsuru Japanese Restaurent"
 					, 'type': "Japanese "
 					, 'latitude': 40.65470807073356
@@ -176,7 +171,7 @@ class App extends Component {
 				}
 			)
 			.catch( function( err ) {
-				self.state.infowindow.setContent( "Sorry data can't be loaded" );
+				self.state.infowindow.setContent( "Sorry data can't be loaded as FourSquare Server is not accessible." );
 			} );
 	}
 

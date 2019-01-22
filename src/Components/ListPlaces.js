@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import LocationItem from './LocationItem';
+
 class ListPlaces extends Component {
     constructor(props) {
         super(props);
@@ -32,7 +33,7 @@ class ListPlaces extends Component {
             'query': value
         });
     }
-/* setState() in componentWillMount() for the first render. Refer
+/* Set the state using componentWillMount(). Refer
 here for more info hhttps://developmentarc.gitbooks.io/react-indepth/content/life_cycle/birth/premounting_with_componentwillmount.html */
     componentWillMount() {
         this.setState({
