@@ -100,7 +100,7 @@ class App extends Component {
         window.google.maps.event.addDomListener(window, "resize", function () {
             let center = map.getCenter();
             window.google.maps.event.trigger(map, "resize");
-            this.state.map.setCenter(center);
+            self.state.map.setCenter(center);
         });
 
         window.google.maps.event.addListener(map, 'click', function () {
@@ -112,18 +112,18 @@ class App extends Component {
         Loop over each location data from the array*/
         this.state.LocationData.forEach(function (location) {
             let name = location.name + ' - ' + location.type; /* Concatenate name and type of the Restaurant*/
-            let newmarker = new window.google.maps.Marker({
+            let marker = new window.google.maps.Marker({
                 position: new window.google.maps.LatLng(location.latitude, location.longitude),
                 animation: window.google.maps.Animation.DROP,
                 map: map
             });
 
-            newmarker.addListener('click', function () {
-                self.openInfoWindow(newmarker);
+            marker.addListener('click', function () {
+                self.openInfoWindow(marker);
             });
 
             location.name = name;
-            location.newmarker = newmarker;
+            location.marker = marker;
             location.display = true;
             LocationData.push(location);
         });
@@ -133,32 +133,26 @@ class App extends Component {
     }
 
     /* Implement infowindow for the Marker location marker- Refer https://developers.google.com/maps/documentation/javascript/infowindows*/
-    openInfoWindow(newmarker) {
+    openInfoWindow(marker) {
         this.closeInfoWindow();
-        this.state.infowindow.open(this.state.map, newmarker);
-        newmarker.setAnimation(window.google.maps.Animation.BOUNCE);
+        this.state.infowindow.open(this.state.map, marker);
+        marker.setAnimation(window.google.maps.Animation.BOUNCE);
         this.setState({
-            'PrevMarker': newmarker
+            'PrevMarker': marker
         });
         this.state.infowindow.setContent('Fetching Data...');
-        this.state.map.setCenter(newmarker.getPosition());
+        this.state.map.setCenter(marker.getPosition());
         this.state.map.panBy(0, -200);
-        this.getVenues(newmarker);
+        this.getVenues(marker);
     }
 
 /* Implement 3rd party API Foursquare and personal client id /client clientSecret to fetch the Restaurant details */
-    getVenues(newmarker) {
+    getVenues(marker) {
         let self = this;
         const clientId = "NWJJIQKBKV4LBP02KY5H4C0GNVONS52QK1MDABSPSUEIMP0O";
         const clientSecret = "2DESP0VRE0EFCVIRHEGLITQCGKY3QVIM2HHZINQZXQJ3LPOQ";
-        let url =
-         "https://api.foursquare.com/v2/venues/search?client_id=" + clientId
-          + "&client_secret=" + clientSecret
-          + "&v=20190119&ll=" +
-         newmarker.getPosition().lat() +
-          "," +
-         newmarker.getPosition().lng() +
-          "&limit=1";
+        let url = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20130815&ll=" + marker.getPosition().lat() + "," + marker.getPosition().lng() + "&limit=1";
+//         "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20190119&ll=" + newmarker.getPosition().lat() +","  newmarker.getPosition().lng() + "&limit=1";
         fetch(url)
             .then(
                 function (response) {
