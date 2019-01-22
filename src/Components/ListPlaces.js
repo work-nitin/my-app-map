@@ -6,14 +6,14 @@ class ListPlaces extends Component {
         this.state = {
             'locations': '',
             'query': '',
-            'suggestions': true,
+            'filters': true,
         };
 
         this.filterLocations = this.filterLocations.bind(this);
-        this.toggleSuggestions = this.toggleSuggestions.bind(this);
+        this.togglefilters = this.togglefilters.bind(this);
     }
 
-    /* Locations filteration based on user query*/
+    /* Locations filteration based on user query and used toLowerCase func to account for both uppercase or lower case letters*/
     filterLocations(event) {
         this.props.closeInfoWindow();
         const {value} = event.target;
@@ -32,17 +32,18 @@ class ListPlaces extends Component {
             'query': value
         });
     }
-
+/* setState() in componentWillMount() for the first render. Refer
+here for more info hhttps://developmentarc.gitbooks.io/react-indepth/content/life_cycle/birth/premounting_with_componentwillmount.html */
     componentWillMount() {
         this.setState({
             'locations': this.props.LocationData
         });
     }
 
-    /*Show and hide suggestions*/
-    toggleSuggestions() {
+    /*Show and hide filters*/
+    togglefilters() {
         this.setState({
-            'suggestions': !this.state.suggestions
+            'filters': !this.state.filters
         });
     }
 
@@ -59,9 +60,9 @@ class ListPlaces extends Component {
                 <input role="search-filter" aria-labelledby="filter" id="search-field" className="search-field" type="text" placeholder="Filter"
                        value={this.state.query} onChange={this.filterLocations}/>
                 <ul>
-                    {this.state.suggestions && locationlist}
+                    {this.state.filters && locationlist}
                 </ul>
-                <button className="button" onClick={this.toggleSuggestions}>Click to hide</button>
+                <button className="button" onClick={this.togglefilters}>Click to hide</button>
             </div>
         );
     }
