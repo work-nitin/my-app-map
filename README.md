@@ -8,7 +8,8 @@ FourSquare API is used to actually fetch more details about the Restaurant in di
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-##Features
+## Features
+
 List of the Restaurant on the Map are present in the side menu which you can use to filter and narrow down your search.
 Click on marker on the map will allow you to read more about the Restaurant using the Foursquare API .
 If you click anywhere else on the map , it will close the marker.
