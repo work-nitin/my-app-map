@@ -1,14 +1,9 @@
 import React, {Component} from 'react';
 import ListPlaces from './Components/ListPlaces.js';
 //import locations from './data/locations.json';
-
-import axios from 'axios';
+//import axios from 'axios';
 
 class App extends Component {
-  state = {
-    LocationData: []
-  }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -59,7 +54,7 @@ class App extends Component {
             ],
             'map': '',
             'infowindow': '',
-            'prevmarker': ''
+            'PrevMarker': ''
         };
         this.initMap = this.initMap.bind(this);
         this.openInfoWindow = this.openInfoWindow.bind(this);
@@ -67,51 +62,30 @@ class App extends Component {
     }
 
     componentDidMount() {
-      this.getVenues()}
-
-      renderMap = () => {
-       //  load the Google Maps script.Refer https://developers.google.com/maps/documentation/javascript/tutorial
+       //  load the Google Maps script using the Google Key.Refer https://developers.google.com/maps/documentation/javascript/tutorial
        loadMapJS('https://maps.googleapis.com/maps/api/js?key=AIzaSyAyN_yf4SYMxFzuT9NxvybIm0_NjKk7U9k&callback=initMap')
        window.initMap = this.initMap
   }
 
-  getVenues = () => {
-    //  let self = this;
-     const url = "https://api.foursquare.com/v2/venues/explore?"
-     const parameters = {
-       client_id: "NWJJIQKBKV4LBP02KY5H4C0GNVONS52QK1MDABSPSUEIMP0O",
-       client_secret: "2DESP0VRE0EFCVIRHEGLITQCGKY3QVIM2HHZINQZXQJ3LPOQ",
-       query: "food",
-       near: "New York",
-       v: "20182507"
-     }
 
-     axios.get(url + new URLSearchParams(parameters))
-           .then(response => {
-             this.setState({
-               LocationData: response.data.response.groups[0].items
-             },this.renderMap() )
-           })
-
-           .catch(error => {
-      console.log("ERROR!! " + error)
-    })
-
-  }
-
-    /*Initialise the map once the google map script is loaded. Refer https://developers.google.com/maps/documentation/javascript/tutorial*/
+    /*Initialise the map when the google map script is loaded.
+     Refer to google maps API at link -  https://developers.google.com/maps/documentation/javascript/tutorial for the reusuable function*/
     initMap() {
-      let LocationData = [];
+       let self = this;
+        let mapview = document.getElementById('map');
+        mapview.style.height = window.innerHeight + "px";
+        let map = new window.google.maps.Map(mapview, {
+            center: {lat: 40.74983060359955, lng:-73.99476},
+            zoom: 7,
+        });
+/*
+// Create A Map
+    let map = new window.google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.74983060359955, lng: -73.99476},
+      zoom: 8
+    })
+    */
 
-      let self = this;
-let mapview = document.getElementById('map');
-mapview.style.height = window.innerHeight + "px";
-let map = new window.google.maps.Map(mapview, {
-    center: {lat: 40.7498306035995, lng: -73.99476},
-    zoom: 7,
-    mapTypeControl: false
-});
-        // Create An InfoWindow
         let InfoWindow = new window.google.maps.InfoWindow({});
 
         window.google.maps.event.addListener(InfoWindow, 'closeclick', function () {
@@ -126,63 +100,124 @@ let map = new window.google.maps.Map(mapview, {
         window.google.maps.event.addDomListener(window, "resize", function () {
             let center = map.getCenter();
             window.google.maps.event.trigger(map, "resize");
-            self.state.map.setCenter(center);
+            this.state.map.setCenter(center);
         });
 
         window.google.maps.event.addListener(map, 'click', function () {
             self.closeInfoWindow();
         });
 
+        let LocationData = [];
+        /* Build the location name , type , marker and setState for LocationData array
+        Loop over each location data from the array*/
         this.state.LocationData.forEach(function (location) {
-            let longname = location.name + ' - ' + location.type;
-            let marker = new window.google.maps.Marker({
-               position: new window.google.maps.LatLng(location.lat, location.lng),
+            let name = location.name + ' - ' + location.type; /* Concatenate name and type of the Restaurant*/
+            let newmarker = new window.google.maps.Marker({
+                position: new window.google.maps.LatLng(location.latitude, location.longitude),
                 animation: window.google.maps.Animation.DROP,
                 map: map
             });
 
-            marker.addListener('click', function () {
-                self.openInfoWindow(marker);
+            newmarker.addListener('click', function () {
+                self.openInfoWindow(newmarker);
             });
 
-            location.longname = longname;
-            location.marker = marker;
+            location.name = name;
+            location.newmarker = newmarker;
             location.display = true;
             LocationData.push(location);
         });
         this.setState({
             'LocationData': LocationData
         });
-
-}//initMap ends new
-
+    }
 
     /* Implement infowindow for the Marker location marker- Refer https://developers.google.com/maps/documentation/javascript/infowindows*/
-    openInfoWindow(marker) {
-      this.closeInfoWindow();
-      this.state.infowindow.open(this.state.map, marker);
-      marker.setAnimation(window.google.maps.Animation.BOUNCE);
-      this.setState({
-          'prevmarker': marker
-      });
-      this.state.infowindow.setContent('Fetching Data...');
-      this.state.map.setCenter(marker.getPosition());
-      this.state.map.panBy(0, -200);
+    openInfoWindow(newmarker) {
+        this.closeInfoWindow();
+        this.state.infowindow.open(this.state.map, newmarker);
+        newmarker.setAnimation(window.google.maps.Animation.BOUNCE);
+        this.setState({
+            'PrevMarker': newmarker
+        });
+        this.state.infowindow.setContent('Fetching Data...');
+        this.state.map.setCenter(newmarker.getPosition());
+        this.state.map.panBy(0, -200);
+        this.getVenues(newmarker);
     }
+
+/* Implement 3rd party API Foursquare and personal client id /client clientSecret to fetch the Restaurant details */
+    getVenues(newmarker) {
+        let self = this;
+        const clientId = "NWJJIQKBKV4LBP02KY5H4C0GNVONS52QK1MDABSPSUEIMP0O";
+        const clientSecret = "2DESP0VRE0EFCVIRHEGLITQCGKY3QVIM2HHZINQZXQJ3LPOQ";
+        let url =
+         "https://api.foursquare.com/v2/venues/search?client_id=" + clientId
+          + "&client_secret=" + clientSecret
+          + "&v=20190119&ll=" +
+         newmarker.getPosition().lat() +
+          "," +
+         newmarker.getPosition().lng() +
+          "&limit=1";
+        fetch(url)
+            .then(
+                function (response) {
+                    if (response.status !== 200) {
+                        self.state.infowindow.setContent("Error in loading data from foursquare API ");
+                        return;
+                    }
+                    response.json().then(function (data) {
+                        let location_data = data.response.venues[0];
+                        let moreDetails = '<a href="https://foursquare.com/v/'+ location_data.id +'" target="_blank">More Info on Foursquare Website</a>'
+                        self.state.infowindow.setContent(moreDetails);
+                    });
+                }
+            )
+            .catch(function (err) {
+                self.state.infowindow.setContent("Sorry data can't be loaded");
+            });
+    }
+
+
+/*
+getVenues = () => {
+  //  let self = this;
+   const url = "https://api.foursquare.com/v2/venues/explore?"
+   const parameters = {
+     client_id: "NWJJIQKBKV4LBP02KY5H4C0GNVONS52QK1MDABSPSUEIMP0O",
+     client_secret: "2DESP0VRE0EFCVIRHEGLITQCGKY3QVIM2HHZINQZXQJ3LPOQ",
+     query: "food",
+     near: "New York",
+     v: "20182507"
+   }
+
+   axios.get(url + new URLSearchParams(parameters))
+         .then(response => {
+           this.setState({
+             LocationData: response.data.response.groups[0].items
+           },this.renderMap() )
+         })
+
+         .catch(error => {
+    console.log("ERROR!! " + error)
+  })
+
+}
+*/
 
     /* By defualt infowindow remains opens. Call the below func explicitilty to close for the marker.
     Refer : https://developers.google.com/maps/documentation/javascript/infowindows*/
     closeInfoWindow() {
-        if (this.state.prevmarker) {
-            this.state.prevmarker.setAnimation(null);
+        if (this.state.PrevMarker) {
+            this.state.PrevMarker.setAnimation(null);
         }
         this.setState({
-            'prevmarker': ''
+            'PrevMarker': ''
         });
         this.state.infowindow.close();
     }
 
-    /*Render UI (map & locations) of App*/
+    /*Render UI locations of App*/
     render() {
         return (
             <div>

@@ -1,4 +1,18 @@
+This is a Single page application featuring a Google map and a list of neighborhood Restaurants in New York City
+which has been bootstrapped with create-react-app.
+
+This APP uses :
+React
+Google Maps API to fetch the Google Maps on the page.
+FourSquare API is used to actually fetch more details about the Restaurant in discussion.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+#Features
+List of the Restaurant on the Map are present in the side menu which you can use to filter and narrow down your search.
+Click on marker on the map will allow you to read more about the Restaurant using the Foursquare API .
+If you click anywhere else on the map , it will close the marker.
+There is a menu hide button available in case you don't like to see LIST of Restaurant on the page.
 
 ## Available Scripts
 
@@ -42,27 +56,3 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
