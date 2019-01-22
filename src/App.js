@@ -115,6 +115,7 @@ class App extends Component {
 		} );
 
 		let LocationData = [];
+
 		/* Build the location name , type , marker and setState for LocationData array
 		Loop over each location data from the array*/
 		this.state.LocationData.forEach( function( location ) {
@@ -126,7 +127,7 @@ class App extends Component {
 			} );
 
 			marker.addListener( 'click', function() {
-				self.openInfoWindow( marker );
+			self.openInfoWindow( marker ); /* INvoke the openInfoWindow func for every marker clicked*/
 			} );
 
 			location.name = name;
@@ -134,10 +135,14 @@ class App extends Component {
 			location.display = true;
 			LocationData.push( location );
 		} );
+
+
+
 		this.setState( {
 			'LocationData': LocationData
 		} );
 	}
+
 
 	/* Implement infowindow for the Marker location marker- Refer https://developers.google.com/maps/documentation/javascript/infowindows*/
 	openInfoWindow( marker ) {
@@ -150,7 +155,7 @@ class App extends Component {
 		this.state.infowindow.setContent( 'Fetching Data...' );
 		this.state.map.setCenter( marker.getPosition() );
 		this.state.map.panBy( 0, -200 );
-		this.getVenues( marker );
+		this.getVenues( marker ); /* Invoke the function getVenues to fetch data from Foursq API for every Info window click*/
 	}
 
 	/* Implement 3rd party API Foursquare and personal client id /client clientSecret to fetch the Restaurant details */
@@ -158,6 +163,7 @@ class App extends Component {
 		let self = this;
 		const clientId = "NWJJIQKBKV4LBP02KY5H4C0GNVONS52QK1MDABSPSUEIMP0O";
 		const clientSecret = "2DESP0VRE0EFCVIRHEGLITQCGKY3QVIM2HHZINQZXQJ3LPOQ";
+    /* Build the url based local params and explore the venues from the response using fetch*/
 		let url = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20130815&ll=" + marker.getPosition()
 			.lat() + "," + marker.getPosition()
 			.lng() + "&limit=1";
@@ -209,7 +215,8 @@ class App extends Component {
 	}
 	*/
 
-	/* By defualt infowindow remains opens. Call the below func explicitilty to close for the marker.
+
+	/* By default infowindow remains opens. Call the below func explicitilty to close for the marker.
 	Refer : https://developers.google.com/maps/documentation/javascript/infowindows*/
 	closeInfoWindow() {
 		if ( this.state.PrevMarker ) {
@@ -255,4 +262,6 @@ function loadMapJS( src ) {
 	};
 	ref.parentNode.insertBefore( script, ref );
 }
+
+
 export default App;
